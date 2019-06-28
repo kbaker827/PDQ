@@ -34,15 +34,15 @@ else {
 
 # Run your code that needs to be elevated here...
 
-$mdtscripts = '\\hq-mdt-01\MDT\ONWASA_DS\Scripts'
+$mdtscripts = '\\PATH-TO-Deploymentshare\Scripts'
 
 Copy-Item -Path "$mdtscripts\PsExec.exe" -Destination "${Env:windir}" -Verbose
 
 netsh advfirewall set allprofiles state off
 ipconfig /registerdns
 
-psexec.exe \\hq-pdq-01.onwasa.com -h -accepteula ipconfig /flushdns
-psexec.exe \\hq-pdq-01.onwasa.com -h -accepteula pdqdeploy.exe Deploy -Package "MDT Defaults" -Targets $env:COMPUTERNAME
+psexec.exe \\pdq.host.fqdn -h -accepteula ipconfig /flushdns
+psexec.exe \\pdq.host.fqdn -h -accepteula pdqdeploy.exe Deploy -Package "New PC Setup" -Targets $env:COMPUTERNAME
 
 start-sleep 30
 while (test-path "C:\Windows\AdminArsenal\PDQDeployRunner\service-1.lock") {
